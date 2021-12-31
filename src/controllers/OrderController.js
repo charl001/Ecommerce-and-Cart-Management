@@ -15,14 +15,15 @@ const createOrder = async (req, res) => {
             return res.status(400).send({ status: false, message: 'Please provide valid userId' })
         }
 
+        if (!TokenDetail == userId) {
+            res.status(401).send({ status: false, message: "userId in url param and in token is not same" })
+        }
+
         const UserFound = await UserModel.findOne({ _id: userId })
         if (!UserFound) {
             return res.status(404).send({ status: false, message: `User Details not found with given UserId` })
         }
 
-        if (!TokenDetail == userId) {
-            res.status(401).send({ status: false, message: "userId in url param and in token is not same" })
-        }
 
         if (!validate.isValidRequestBody(requestBody)) {
             return res.status(400).send({ status: false, message: 'Invalid params received in request body' })
